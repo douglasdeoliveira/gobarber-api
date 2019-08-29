@@ -1,7 +1,11 @@
+import * as Sentry from '@sentry/node';
 import Bee from 'bee-queue';
 
 import CancellationMail from '../app/jobs/CancellationMail';
 import redisConfig from '../config/redis';
+import sentryConfig from '../config/sentry';
+
+Sentry.init(sentryConfig);
 
 const jobs = [CancellationMail];
 
@@ -36,7 +40,11 @@ class Queue {
   }
 
   handleFailure(job, err) {
-    console.log(`Queue ${job.queue.name}: FAILED`, err);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Queue ${job.queue.name}: FAILED`, err);
+    }
+
+    Sentry.captureException(err);
   }
 }
 

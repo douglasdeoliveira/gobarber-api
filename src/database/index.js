@@ -11,14 +11,22 @@ const models = [Appointment, File, User];
 class Database {
   constructor() {
     this.connection = new Sequelize(databaseConfig);
+
     this.init();
+    this.associate();
     this.mongo();
   }
 
   init() {
-    models
-      .map(model => model.init(this.connection))
-      .map(model => model.associate && model.associate(this.connection.models));
+    models.forEach(model => model.init(this.connection));
+  }
+
+  associate() {
+    models.forEach(model => {
+      if (model.associate) {
+        model.associate(this.connection.models);
+      }
+    });
   }
 
   mongo() {
