@@ -3,6 +3,7 @@ import express from 'express';
 import { resolve } from 'path';
 import Youch from 'youch';
 
+import 'dotenv/config';
 import 'express-async-errors';
 
 import './database';
@@ -36,9 +37,13 @@ class App {
 
   exceptionHandler() {
     this.server.use(async (err, req, res, next) => {
-      const errors = await new Youch(err, req).toJSON();
+      if (process.env.NODE_ENV === 'development') {
+        const errors = await new Youch(err, req).toJSON();
 
-      res.status(500).json(errors);
+        res.status(500).json(errors);
+      }
+
+      res.status(500).json('Internal server error');
     });
   }
 }
