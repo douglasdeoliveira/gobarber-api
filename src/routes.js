@@ -10,23 +10,31 @@ import ScheduleController from './app/controllers/ScheduleController';
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
 import authMiddleware from './app/middlewares/auth';
+import validateAppointmentSave from './app/validators/AppointmentSave';
+import validateSessionSave from './app/validators/SessionSave';
+import validateUserSave from './app/validators/UserSave';
+import validateUserUpdate from './app/validators/UserUpdate';
 import multerConfig from './config/multer';
 
 const routes = new Router();
 const upload = multer(multerConfig);
 
-routes.post('/users', UserController.save);
-routes.post('/sessions', SessionController.save);
+routes.post('/users', validateUserSave, UserController.save);
+routes.post('/sessions', validateSessionSave, SessionController.save);
 
 routes.use(authMiddleware);
 
-routes.put('/users', UserController.update);
+routes.put('/users', validateUserUpdate, UserController.update);
 
 routes.get('/providers', ProviderController.index);
 routes.get('/providers/:id/available', AvailableController.index);
 
 routes.get('/appointments', AppointmentController.index);
-routes.post('/appointments', AppointmentController.save);
+routes.post(
+  '/appointments',
+  validateAppointmentSave,
+  AppointmentController.save
+);
 routes.delete('/appointments/:id', AppointmentController.remove);
 
 routes.get('/schedules', ScheduleController.index);
