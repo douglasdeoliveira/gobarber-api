@@ -1,5 +1,6 @@
 import { isBefore, subHours } from 'date-fns';
 
+import Cache from '../../lib/Cache';
 import Queue from '../../lib/Queue';
 import CancellationMail from '../jobs/CancellationMail';
 import Appointment from '../models/Appointment';
@@ -39,6 +40,9 @@ class CancelAppointmentService {
     await Queue.add(CancellationMail.key, {
       appointment,
     });
+
+    // invalidate cache
+    await Cache.invalidatePrefix(`user:${user_id}:appointments`);
 
     return appointment;
   }

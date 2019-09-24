@@ -1,3 +1,4 @@
+import Cache from '../../lib/Cache';
 import Appointment from '../models/Appointment';
 import File from '../models/File';
 import User from '../models/User';
@@ -5,8 +6,19 @@ import CancelAppointmentService from '../services/CancelAppointmentService';
 import CreateAppointmentService from '../services/CreateAppointmentService';
 
 class AppointmentController {
+  // eslint-disable-next-line consistent-return
   async index(req, res) {
     const { page = 1, limit = 20 } = req.query;
+
+    const cacheKey = `user:${req.userId}:appointments:${page}:${limit}`;
+    const cached = await Cache.get(cacheKey);
+
+    if (cached) {
+      return res.json(cached);
+    }
+
+    // invalidate cache
+    await Cache.invalidatePrefix(`user:${req.userId}:appointments`);
 
     const appoitments = await Appointment.findAll({
       where: {
@@ -32,6 +44,8 @@ class AppointmentController {
         },
       ],
     });
+
+    await Cache.set(cacheKey, appoitments);
 
     res.json(appoitments);
   }
