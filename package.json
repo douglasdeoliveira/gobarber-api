@@ -1,10 +1,7 @@
 {
-  "name": "gobarber",
+  "name": "gobarber-api",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@gitlab.com:douglasoliveira/gobarber.git",
-  "author": "Douglas Oliveira <oliveira.douglas@outlook.com>",
-  "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.js",
     "queue": "nodemon src/queue.js"
