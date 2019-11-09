@@ -32,9 +32,11 @@ class Database {
 
   mongo() {
     const { host, port, database, user, pass } = mongoConfig;
-    const mongoURI = `mongodb://${user}:${pass}@${host}:${port}/${database}`;
+    const mongoURI = `mongodb://${host}:${port}/${database}`;
 
     this.mongoConnection = mongoose.connect(mongoURI, {
+      user,
+      pass,
       useNewUrlParser: true,
       useFindAndModify: true,
     });

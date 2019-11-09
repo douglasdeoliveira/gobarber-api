@@ -12,6 +12,7 @@ import 'dotenv/config';
 import 'express-async-errors';
 
 import './database';
+import redisConfig from './config/redis';
 import sentryConfig from './config/sentry';
 import routes from './routes';
 
@@ -41,10 +42,7 @@ class App {
       this.server.use(
         new RateLimit({
           store: new RateLimitRedis({
-            client: redis.createClient({
-              host: process.env.REDIS_HOST,
-              port: process.env.REDIS_PORT,
-            }),
+            client: redis.createClient({ redisConfig }),
           }),
           windowMs: 1000 * 60 * 15,
           max: 100,
