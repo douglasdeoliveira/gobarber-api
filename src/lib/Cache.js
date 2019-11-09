@@ -1,10 +1,15 @@
 import Redis from 'ioredis';
 
+import redisConfig from '../config/redis';
+
 class Cache {
   constructor() {
+    const { host, port, password } = redisConfig;
+
     this.redis = new Redis({
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
+      host,
+      port,
+      password,
       keyPrefix: 'cache:',
     });
   }
