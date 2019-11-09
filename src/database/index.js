@@ -37,6 +37,7 @@ class Database {
     this.mongoConnection = mongoose.connect(mongoURI, {
       user,
       pass,
+      useUnifiedTopology: true,
       useNewUrlParser: true,
       useFindAndModify: true,
     });
