@@ -39,10 +39,14 @@ class App {
     );
 
     if (process.env.NODE_ENV !== 'development') {
+      const { port, host, password } = redisConfig;
+      const redisClient = redis.createClient(port, host);
+      redisClient.auth(password);
+
       this.server.use(
         new RateLimit({
           store: new RateLimitRedis({
-            client: redis.createClient({ redisConfig }),
+            client: redisClient,
           }),
           windowMs: 1000 * 60 * 15,
           max: 100,
