@@ -28,9 +28,14 @@ class App {
   }
 
   middlewares() {
+    const corsOptions = {
+      origin: 'https://gobarber.douglasdeoliveira.dev',
+      optionsSuccessStatus: 200,
+    };
+
     this.server.use(Sentry.Handlers.requestHandler());
     this.server.use(helmet());
-    this.server.use(cors());
+    this.server.use(cors(corsOptions));
     this.server.use(express.json());
 
     this.server.use(
