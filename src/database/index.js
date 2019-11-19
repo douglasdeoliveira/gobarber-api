@@ -34,7 +34,7 @@ class Database {
     const { host, port, database, user, pass } = mongoConfig;
     const mongoURI = `mongodb://${user}:${encodeURIComponent(
       pass
-    )}@${host}:${port}/${database}&authSource=admin`;
+    )}@${host}:${port}/${database}`;
 
     this.mongoConnection = mongoose.connect(mongoURI, {
       useUnifiedTopology: true,
